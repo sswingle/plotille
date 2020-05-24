@@ -120,3 +120,12 @@ def mk_timedelta(v):
     seconds = int(v)
     microseconds = int((v - seconds) * 1e6)
     return timedelta(seconds=seconds, microseconds=microseconds)
+
+
+def is_iterable(v):
+    try:
+        iter(v)
+    except TypeError:
+        return False
+    else:
+        return True

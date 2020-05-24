@@ -33,7 +33,7 @@ from six.moves import zip
 from ._canvas import Canvas
 from ._colors import color
 from ._input_formatter import InputFormatter
-from ._util import hist, mk_timedelta, timestamp
+from ._util import hist, is_iterable, mk_timedelta, timestamp
 
 # TODO documentation!!!
 # TODO tests
@@ -237,6 +237,36 @@ class Figure(object):
 
     def clear(self):
         self._plots = []
+
+    def vlines(self, X, ymin, ymax, lc=None, label=None):  # noqa: N803
+        '''Plot vertical lines.
+
+        Plot vertical lines at each *x* from *ymin* to *ymax*.
+
+        Parameters
+        ----------
+        x : scalar or 1D array_like
+            x-indexes where to plot the lines.
+
+        ymin, ymax : scalar or 1D array_like
+            Respective beginning and end of each line. If scalars are
+            provided, all lines will have same length.
+
+        lc : line color, optional, default: None
+
+        label : string, optional, default: None
+        '''
+        if not is_iterable(X):
+            X = [X]
+        if not is_iterable(ymin):
+            ymin = [ymin]
+        if not is_iterable(ymax):
+            ymax = [ymax]
+
+        for x, ymin_, ymax_ in zip(X, ymin, ymax):
+            if lc is None:
+                lc_ = next(self._color_seq)[self.color_mode]
+            self._plots += [Plot.create([x, x], [ymin_, ymax_], lc_, 'linear', label)]
 
     def plot(self, X, Y, lc=None, interp='linear', label=None):  # noqa: N803
         if len(X) > 0:
