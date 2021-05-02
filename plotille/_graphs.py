@@ -77,7 +77,7 @@ def hist(X, bins=40, width=80, log_scale=False, linesep=os.linesep,
     return linesep.join(canvas)
 
 
-def histogram(X, bins=160, width=80, height=40, X_label='X', Y_label='Counts', linesep=os.linesep,
+def histogram(X, weights=None, bins=160, width=80, height=40, X_label='X', Y_label='Counts', linesep=os.linesep,
               x_min=None, x_max=None, y_min=None, y_max=None,
               lc=None, bg=None, color_mode='names'):
     """Create histogram over `X`
@@ -123,7 +123,7 @@ def histogram(X, bins=160, width=80, height=40, X_label='X', Y_label='Counts', l
     if lc is None and bg is None:
         fig.with_colors = False
 
-    fig.histogram(X, bins, lc)
+    fig.histogram(X, bins, lc, weights=weights)
 
     return fig.show()
 

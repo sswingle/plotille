@@ -57,7 +57,7 @@ def _numpy_to_native(x):
     return x
 
 
-def hist(X, bins):
+def hist(X, bins, weights=None):
     """Create histogram similar to `numpy.hist()`
 
     Parameters:
@@ -89,13 +89,15 @@ def hist(X, bins):
     xwidth = delta / bins
 
     y = [0] * bins
-    for x in X:
+    if weights is None:
+        weights = [1]* len(X)
+    for x, weight in zip(X, weights):
         x_ = _numpy_to_native(x)
         delta = (x_ - xmin)
         if isinstance(delta, timedelta):
             delta = timestamp(delta)
         x_idx = min(bins - 1, int(delta // xwidth))
-        y[x_idx] += 1
+        y[x_idx] += weight
 
     if is_datetime:
         xwidth = mk_timedelta(xwidth)

@@ -250,11 +250,11 @@ class Figure(object):
                 lc = next(self._color_seq)[self.color_mode]
             self._plots += [Plot.create(X, Y, lc, None, label)]
 
-    def histogram(self, X, bins=160, lc=None):
+    def histogram(self, X, bins=160, lc=None, weights=None):
         if len(X) > 0:
             if lc is None:
                 lc = next(self._color_seq)[self.color_mode]
-            self._plots += [Histogram.create(X, bins, lc)]
+            self._plots += [Histogram.create(X, bins, lc, weights=weights)]
 
     def show(self, legend=False):
         xmin, xmax = self.x_limits()
@@ -345,8 +345,8 @@ class Plot(namedtuple('Plot', ['X', 'Y', 'lc', 'interp', 'label'])):
 
 class Histogram(namedtuple('Histogram', ['X', 'bins', 'frequencies', 'buckets', 'lc'])):
     @classmethod
-    def create(cls, X, bins, lc):
-        frequencies, buckets = hist(X, bins)
+    def create(cls, X, bins, lc, weights=None):
+        frequencies, buckets = hist(X, bins, weights=weights)
 
         return cls(X, bins, frequencies, buckets, lc)
 
